@@ -1,7 +1,7 @@
 package main
 
-import "fmt"
+import "github.com/kukhars707/homework4/server"
 
 func main() {
-	fmt.Println("Hello World!")
+	server.NewServer().Start()
 }
