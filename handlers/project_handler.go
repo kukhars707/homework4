@@ -1,7 +1,8 @@
 package handlers
 
 import (
-	"fmt"
+	"encoding/json"
+	"github.com/gorilla/mux"
 	"github.com/kukhars707/homework4/services"
 	"net/http"
 )
@@ -15,21 +16,86 @@ func NewProjectHandler(service services.ProjectService) ProjectHandler {
 }
 
 func (h ProjectHandler) GetProjects(w http.ResponseWriter, r *http.Request) {
-	fmt.Println("get project not implement")
+	projects, err := h.service.GetProjects()
+	if err != nil {
+		w.WriteHeader(http.StatusBadRequest)
+		return
+	}
+
+	w.WriteHeader(http.StatusOK)
+	w.Header().Add("Content-Type", "application/json")
+	err = json.NewEncoder(w).Encode(projects)
+	if err != nil {
+		panic(err)
+		return
+	}
 }
 
 func (h ProjectHandler) GetProject(w http.ResponseWriter, r *http.Request) {
-	fmt.Println("get project not implement")
+	projectID := mux.Vars(r)["id"]
+	project, err := h.service.GetProject(projectID)
+
+	if err != nil {
+		w.WriteHeader(http.StatusBadRequest)
+		return
+	}
+
+	w.WriteHeader(http.StatusOK)
+	w.Header().Add("Content-Type", "application/json")
+	err = json.NewEncoder(w).Encode(project)
+	if err != nil {
+		panic(err)
+		return
+	}
 }
 
 func (h ProjectHandler) CreateProject(w http.ResponseWriter, r *http.Request) {
-	fmt.Println("create project not implement")
+	name := r.FormValue("name")
+	description := r.FormValue("description")
+
+	project, err := h.service.CreateProject(name, description)
+
+	if err != nil {
+		w.WriteHeader(http.StatusInternalServerError)
+		return
+	}
+
+	w.Header().Add("Content-Type", "application/json")
+	w.WriteHeader(http.StatusCreated)
+	err = json.NewEncoder(w).Encode(project)
 }
 
 func (h ProjectHandler) EditProject(w http.ResponseWriter, r *http.Request) {
-	fmt.Println("edit project not implement")
+	projectID := mux.Vars(r)["id"]
+	name := r.FormValue("name")
+	description := r.FormValue("description")
+
+	project, err := h.service.EditProject(projectID, name, description)
+
+	if err != nil {
+		w.WriteHeader(http.StatusInternalServerError)
+		return
+	}
+
+	w.Header().Add("Content-Type", "application/json")
+	w.WriteHeader(http.StatusOK)
+	err = json.NewEncoder(w).Encode(project)
 }
 
 func (h ProjectHandler) RemoveProject(w http.ResponseWriter, r *http.Request) {
-	fmt.Println("delete project not implement")
+	projectID := mux.Vars(r)["id"]
+	project, err := h.service.RemoveProject(projectID)
+
+	if err != nil {
+		w.WriteHeader(http.StatusBadRequest)
+		return
+	}
+
+	w.WriteHeader(http.StatusOK)
+	w.Header().Add("Content-Type", "application/json")
+	err = json.NewEncoder(w).Encode(project)
+	if err != nil {
+		panic(err)
+		return
+	}
 }

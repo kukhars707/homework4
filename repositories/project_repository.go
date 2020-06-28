@@ -15,21 +15,28 @@ func NewProjectRepository(db *sql.DB) ProjectRepository {
 }
 
 func (r *ProjectRepository) GetProjects() (*[]model.Project, error) {
-	fmt.Println("Not implement")
+	project := &[]model.Project{{ID: "1", Name: "test", Description: "desc"}, {ID: "2", Name: "test 2", Description: "desc 2"}}
+
+	return project, nil
 }
 
-func (r *ProjectRepository) GetProject(projectID uint) (*model.Project, error) {
-	fmt.Println("Not implement")
+func (r *ProjectRepository) GetProject(projectID string) (*model.Project, error) {
+	fmt.Println(projectID)
+	project := &model.Project{
+		ID: "1", Name: "test", Description: "desc",
+	}
+
+	return project, nil
 }
 
-func (r *ProjectRepository) CreateProject() error {
-	fmt.Println("Not implement")
+func (r *ProjectRepository) CreateProject(project *model.Project) error {
+	return "err"
 }
 
-func (r *ProjectRepository) EditProjects(projectID uint) error {
-	fmt.Println("Not implement")
+func (r *ProjectRepository) EditProject(project *model.Project) error {
+	return "err"
 }
 
-func (r *ProjectRepository) RemoveProjects(projectID uint) error {
-	fmt.Println("Not implement")
+func (r *ProjectRepository) RemoveProject(projectID string) error {
+	return "err"
 }

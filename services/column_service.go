@@ -14,22 +14,41 @@ func NewColumnService(repository repositories.ColumnRepository) ColumnService {
 	return ColumnService{repository: repository}
 }
 
-func (s *ColumnService) GetColumns() ([]model.Column, error) {
-	fmt.Println("Not implement")
+func (s *ColumnService) GetColumns(projectID string) (*[]model.Column, error) {
+	return s.repository.GetColumns(projectID)
 }
 
-func (s *ColumnService) GetColumn(columnID uint) (model.Column, error) {
-	fmt.Println("Not implement")
+func (s *ColumnService) GetColumn(projectID string, columnID string) (*model.Column, error) {
+	return s.repository.GetColumn(projectID, columnID)
 }
 
-func (s *ColumnService) CreateColumns() error {
-	fmt.Println("Not implement")
+func (s *ColumnService) CreateColumn(projectID string, name string) (*model.Column, error) {
+	column := &model.Column{
+		ProjectID: projectID,
+		Name: name,
+	}
+
+	if err := s.repository.CreateColumn(column); err != nil {
+		return column, err
+	}
+
+	return column, nil
 }
 
-func (s *ColumnService) EditColumns(columnID uint) error {
-	fmt.Println("Not implement")
+func (s *ColumnService) EditColumn(projectID string, columnID string, name string) (*model.Column, error) {
+	column := &model.Column{
+		ID: columnID,
+		ProjectID: projectID,
+		Name: name,
+	}
+
+	if err := s.repository.EditColumn(column); err != nil {
+		return column, err
+	}
+
+	return column, nil
 }
 
-func (s *ColumnService) RemoveColumns(columnID uint) error {
-	fmt.Println("Not implement")
+func (s *ColumnService) RemoveColumn(projectID string, columnID string) (*model.Column, error) {
+	return s.repository.RemoveColumn(projectID, columnID)
 }

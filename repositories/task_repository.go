@@ -14,22 +14,22 @@ func NewTaskRepository(db *sql.DB) TaskRepository {
 	return TaskRepository{db: db}
 }
 
-func (r *TaskRepository) GetTasks() (*[]model.Task, error)  {
+func (r *TaskRepository) GetTasks(projectID string, columnID string) (*[]model.Task, error)  {
 	fmt.Println("Not Implement")
 }
 
-func (r *TaskRepository) GetTask(taskID uint) (*model.Task, error)  {
+func (r *TaskRepository) GetTask(projectID string, columnID string, taskID string) (*model.Task, error)  {
 	fmt.Println("Not Implement")
 }
 
-func (r *TaskRepository) CreateTasks() error  {
+func (r *TaskRepository) CreateTasks(task *model.Task) error  {
 	fmt.Println("Not Implement")
 }
 
-func (r *TaskRepository) EditTasks(taskID uint) error  {
+func (r *TaskRepository) EditTasks(task *model.Task) error  {
 	fmt.Println("Not Implement")
 }
 
-func (r *TaskRepository) RemoveTasks(taskID uint) error  {
+func (r *TaskRepository) RemoveTasks(projectID string, columnID string, taskId string) error  {
 	fmt.Println("Not Implement")
 }
