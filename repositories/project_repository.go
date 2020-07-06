@@ -2,7 +2,6 @@ package repositories
 
 import (
 	"database/sql"
-	"fmt"
 	model "github.com/kukhars707/homework4/models"
 )
 
@@ -15,28 +14,72 @@ func NewProjectRepository(db *sql.DB) ProjectRepository {
 }
 
 func (r *ProjectRepository) GetProjects() (*[]model.Project, error) {
-	project := &[]model.Project{{ID: "1", Name: "test", Description: "desc"}, {ID: "2", Name: "test 2", Description: "desc 2"}}
+	var p model.Project
+	selectStatement := `SELECT * from project;`
+	result, err := r.db.Query(selectStatement)
 
-	return project, nil
+	if err != nil {
+		panic(err.Error())
+	}
+
+	var pSlice []model.Project
+	for result.Next() {
+		result.Scan(&p.ID, &p.Name, &p.Description)
+		pSlice = append(pSlice, p)
+	}
+
+	return &pSlice, nil
 }
 
 func (r *ProjectRepository) GetProject(projectID string) (*model.Project, error) {
-	fmt.Println(projectID)
-	project := &model.Project{
-		ID: "1", Name: "test", Description: "desc",
+	selectStatement := `SELECT * FROM project WHERE id = $1;`
+	result, err := r.db.Query(selectStatement, projectID)
+
+	if err != nil {
+		panic(err.Error())
 	}
 
-	return project, nil
+	var p model.Project
+
+	for result.Next() {
+		result.Scan(&p.ID, &p.Name, &p.Description)
+	}
+
+	return &p, nil
 }
 
 func (r *ProjectRepository) CreateProject(project *model.Project) error {
-	return "err"
+	insertStatement := `
+		INSERT INTO project (name, description) 
+		VALUES ($1, $2);`
+	_, err := r.db.Exec(insertStatement, project.Name, project.Description)
+	if err != nil {
+		panic(err)
+	}
+
+	return err
 }
 
 func (r *ProjectRepository) EditProject(project *model.Project) error {
-	return "err"
+	sqlStatement := `UPDATE project SET name = $2, description = $3 WHERE id = $1;`
+
+	_, err := r.db.Exec(sqlStatement, project.ID, project.Name, project.Description)
+
+	if err != nil {
+		panic(err.Error())
+	}
+
+	return err
 }
 
 func (r *ProjectRepository) RemoveProject(projectID string) error {
-	return "err"
+	sqlStatement := `DELETE FROM project WHERE id = $1;`
+
+	_, err := r.db.Exec(sqlStatement, projectID)
+
+	if err != nil {
+		panic(err.Error())
+	}
+
+	return err
 }

@@ -2,7 +2,6 @@ package handlers
 
 import (
 	"encoding/json"
-	"fmt"
 	"github.com/gorilla/mux"
 	"github.com/kukhars707/homework4/services"
 	"net/http"
@@ -17,11 +16,9 @@ func NewCommentHandler(service services.CommentService) CommentHandler {
 }
 
 func (h CommentHandler) GetComments(w http.ResponseWriter, r *http.Request) {
-	projectID := mux.Vars(r)["projectId"]
-	columnID := mux.Vars(r)["columnId"]
 	taskID := mux.Vars(r)["taskId"]
 
-	comments, err := h.service.GetComments(projectID, columnID, taskID)
+	comments, err := h.service.GetComments(taskID)
 
 	if err != nil {
 		w.WriteHeader(http.StatusBadRequest)
@@ -38,12 +35,10 @@ func (h CommentHandler) GetComments(w http.ResponseWriter, r *http.Request) {
 }
 
 func (h CommentHandler) CreateComments(w http.ResponseWriter, r *http.Request) {
-	projectID := mux.Vars(r)["projectId"]
-	columnID := mux.Vars(r)["columnId"]
 	taskID := mux.Vars(r)["taskId"]
 	text := r.FormValue("text")
 
-	comment, err := h.service.CreateComment(projectID, columnID, taskID, text)
+	comment, err := h.service.CreateComment(taskID, text)
 
 	if err != nil {
 		w.WriteHeader(http.StatusInternalServerError)
@@ -56,13 +51,10 @@ func (h CommentHandler) CreateComments(w http.ResponseWriter, r *http.Request) {
 }
 
 func (h CommentHandler) EditComments(w http.ResponseWriter, r *http.Request) {
-	projectID := mux.Vars(r)["projectId"]
-	columnID := mux.Vars(r)["columnId"]
-	taskID := mux.Vars(r)["taskId"]
 	commentID := mux.Vars(r)["commentId"]
 	text := r.FormValue("text")
 
-	comment, err := h.service.CreateComment(projectID, columnID, taskID, commentID, text)
+	comment, err := h.service.CreateComment(commentID, text)
 
 	if err != nil {
 		w.WriteHeader(http.StatusInternalServerError)
@@ -75,10 +67,19 @@ func (h CommentHandler) EditComments(w http.ResponseWriter, r *http.Request) {
 }
 
 func (h CommentHandler) RemoveComments(w http.ResponseWriter, r *http.Request) {
-	projectID := mux.Vars(r)["projectId"]
-	columnID := mux.Vars(r)["columnId"]
-	taskID := mux.Vars(r)["taskId"]
 	commentID := mux.Vars(r)["commentId"]
 
-	comment, err := h.service.RemoveComments(projectID, columnID, taskID, commentID)
+	err := h.service.RemoveComments(commentID)
+
+	if err != nil {
+		w.WriteHeader(http.StatusBadRequest)
+		return
+	}
+
+	w.WriteHeader(http.StatusOK)
+	w.Header().Add("Content-Type", "application/json")
+	if err != nil {
+		panic(err)
+		return
+	}
 }

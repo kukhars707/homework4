@@ -14,8 +14,9 @@ import (
 const (
 	host     = "localhost"
 	port     = 5432
-	user     = "sergey"
-	dbname   = "taskmanager"
+	user     = ""
+	dbname   = ""
+	password = ""
 )
 
 type Server struct {
@@ -27,8 +28,8 @@ func NewServer() *Server {
 }
 
 func (s *Server) Start() {
-	psqlInfo := fmt.Sprintf("host=%s port=%d user=%s "+ "dbname=%s sslmode=disable",
-		host, port, user, dbname)
+	psqlInfo := fmt.Sprintf("host=%s port=%d user=%s password=%s "+ "dbname=%s sslmode=disable",
+		host, port, user, password, dbname)
 	db, err := sql.Open("postgres", psqlInfo)
 	if err != nil {
 		panic(err)

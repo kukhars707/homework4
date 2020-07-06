@@ -1,7 +1,6 @@
 package services
 
 import (
-	"fmt"
 	model "github.com/kukhars707/homework4/models"
 	"github.com/kukhars707/homework4/repositories"
 )
@@ -16,10 +15,6 @@ func NewColumnService(repository repositories.ColumnRepository) ColumnService {
 
 func (s *ColumnService) GetColumns(projectID string) (*[]model.Column, error) {
 	return s.repository.GetColumns(projectID)
-}
-
-func (s *ColumnService) GetColumn(projectID string, columnID string) (*model.Column, error) {
-	return s.repository.GetColumn(projectID, columnID)
 }
 
 func (s *ColumnService) CreateColumn(projectID string, name string) (*model.Column, error) {
@@ -49,6 +44,6 @@ func (s *ColumnService) EditColumn(projectID string, columnID string, name strin
 	return column, nil
 }
 
-func (s *ColumnService) RemoveColumn(projectID string, columnID string) (*model.Column, error) {
-	return s.repository.RemoveColumn(projectID, columnID)
+func (s *ColumnService) RemoveColumn(columnID string) error {
+	return s.repository.RemoveColumn(columnID)
 }

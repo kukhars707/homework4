@@ -84,7 +84,7 @@ func (h ProjectHandler) EditProject(w http.ResponseWriter, r *http.Request) {
 
 func (h ProjectHandler) RemoveProject(w http.ResponseWriter, r *http.Request) {
 	projectID := mux.Vars(r)["id"]
-	project, err := h.service.RemoveProject(projectID)
+	err := h.service.RemoveProject(projectID)
 
 	if err != nil {
 		w.WriteHeader(http.StatusBadRequest)
@@ -93,7 +93,6 @@ func (h ProjectHandler) RemoveProject(w http.ResponseWriter, r *http.Request) {
 
 	w.WriteHeader(http.StatusOK)
 	w.Header().Add("Content-Type", "application/json")
-	err = json.NewEncoder(w).Encode(project)
 	if err != nil {
 		panic(err)
 		return

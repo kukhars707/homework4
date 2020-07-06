@@ -25,19 +25,18 @@ func (r *Router) CreateRoutes(
 	r.Route.HandleFunc("/project/{id}", projectHandler.RemoveProject).Methods("DELETE")
 
 	r.Route.HandleFunc("/{projectId}/column", columnHandler.GetColumns).Methods("GET")
-	r.Route.HandleFunc("/{projectId}/{columnId}", columnHandler.GetColumn).Methods("GET")
 	r.Route.HandleFunc("/{projectId}/column", columnHandler.CreateColumn).Methods("POST")
 	r.Route.HandleFunc("/{projectId}/{columnId}", columnHandler.EditColumn).Methods("PUT")
-	r.Route.HandleFunc("/{projectId}/{columnId}", columnHandler.RemoveColumn).Methods("DELETE")
+	r.Route.HandleFunc("/{columnId}", columnHandler.RemoveColumn).Methods("DELETE")
 
-	r.Route.HandleFunc("/{projectId}/{columnId}/task", taskHandler.GetTasks).Methods("GET")
-	r.Route.HandleFunc("/{projectId}/{columnId}/{taskId}", taskHandler.GetTask).Methods("GET")
+	r.Route.HandleFunc("/{projectId}/tasks", taskHandler.GetTasks).Methods("GET")
+	r.Route.HandleFunc("/task/{taskId}", taskHandler.GetTask).Methods("GET")
 	r.Route.HandleFunc("/{projectId}/{columnId}/task", taskHandler.CreateTasks).Methods("POST")
 	r.Route.HandleFunc("/{projectId}/{columnId}/{taskId}", taskHandler.EditTasks).Methods("PUT")
-	r.Route.HandleFunc("/{projectId}/{columnId}/{taskId}", taskHandler.RemoveTasks).Methods("DELETE")
+	r.Route.HandleFunc("/task/{taskId}", taskHandler.RemoveTasks).Methods("DELETE")
 
-	r.Route.HandleFunc("/{projectId}/{columnId}/{taskId}", commentHandler.GetComments).Methods("GET")
-	r.Route.HandleFunc("/{projectId}/{columnId}/{taskId}", commentHandler.CreateComments).Methods("POST")
-	r.Route.HandleFunc("/{projectId}/{columnId}/{taskId}/{commentId}", commentHandler.EditComments).Methods("PUT")
-	r.Route.HandleFunc("/{projectId}/{columnId}/{taskId}/{commentId}", commentHandler.RemoveComments).Methods("DELETE")
+	r.Route.HandleFunc("/{taskId}/comment", commentHandler.GetComments).Methods("GET")
+	r.Route.HandleFunc("/{taskId}/comment", commentHandler.CreateComments).Methods("POST")
+	r.Route.HandleFunc("/comment/{commentId}", commentHandler.EditComments).Methods("PUT")
+	r.Route.HandleFunc("/{commentId}", commentHandler.RemoveComments).Methods("DELETE")
 }

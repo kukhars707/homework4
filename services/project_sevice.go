@@ -48,6 +48,6 @@ func (s *ProjectService) EditProject(projectID string, name string, description 
 	return project, nil
 }
 
-func (s *ProjectService) RemoveProject(projectID string) (*model.Project, error) {
+func (s *ProjectService) RemoveProject(projectID string) error {
 	return s.repository.RemoveProject(projectID)
 }

@@ -2,7 +2,6 @@ package repositories
 
 import (
 	"database/sql"
-	"fmt"
 	model "github.com/kukhars707/homework4/models"
 )
 
@@ -14,27 +13,58 @@ func NewColumnRepository(db *sql.DB) ColumnRepository {
 	return ColumnRepository{db: db}
 }
 
-func (r *ColumnRepository) GetColumns(projectID string) (*[]model.Column, error) {
-	column := &[]model.Column{{ID: "1", Name: "name"}, {ID: "2", Name: "name2"}}
+func (r *ColumnRepository) GetColumns(projectId string) (*[]model.Column, error) {
+	var c model.Column
+	sqlStatement := `SELECT * FROM column WHERE projectID = $1;`
+	result, err := r.db.Query(sqlStatement, projectId)
 
-	return column, nil
-}
+	if err != nil {
+		panic(err.Error())
+	}
 
-func (r *ColumnRepository) GetColumn(projectID string, columnID string) (*model.Column, error) {
-	fmt.Println(columnID)
-	column := &model.Column{ID: "1", Name: "name"}
+	var cSlice []model.Column
 
-	return column, nil
+	for result.Next() {
+		result.Scan(&c.ID, &c.Name)
+
+		cSlice = append(cSlice, c)
+	}
+
+	return &cSlice, nil
 }
 
 func (r *ColumnRepository) CreateColumn(column *model.Column) error {
-	fmt.Println("Not implement")
+	sqlStatement := `INSERT INTO column (projectID, name) VALUES ($1, $2);`
+
+	_, err := r.db.Exec(sqlStatement, column.ProjectID, column.Name)
+
+	if err != nil {
+		panic(err.Error())
+	}
+
+	return err
 }
 
 func (r *ColumnRepository) EditColumn(column *model.Column) error {
-	fmt.Println("Not implement")
+	sqlStatement := `UPDATE column SET name = $2, projectID = $3 WHERE id = $1;`
+
+	_, err := r.db.Exec(sqlStatement, column.ID, column.Name, column.ProjectID)
+
+	if err != nil {
+		panic(err.Error())
+	}
+
+	return err
 }
 
-func (r *ColumnRepository) RemoveColumn(projectID string, columnID string) error {
-	fmt.Println("Not implement")
+func (r *ColumnRepository) RemoveColumn(columnID string) error {
+	sqlStatement := `DELETE column WHERE id = $1;`
+
+	_, err := r.db.Exec(sqlStatement, columnID)
+
+	if err != nil {
+		panic(err.Error())
+	}
+
+	return err
 }

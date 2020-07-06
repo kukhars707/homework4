@@ -33,26 +33,6 @@ func (h ColumnHandler) GetColumns(w http.ResponseWriter, r *http.Request) {
 	}
 }
 
-func (h ColumnHandler) GetColumn(w http.ResponseWriter, r *http.Request) {
-	projectID := mux.Vars(r)["projectId"]
-	columnID := mux.Vars(r)["columnId"]
-
-	column, err := h.service.GetColumn(projectID, columnID)
-
-	if err != nil {
-		w.WriteHeader(http.StatusBadRequest)
-		return
-	}
-
-	w.WriteHeader(http.StatusOK)
-	w.Header().Add("Content-Type", "application/json")
-	err = json.NewEncoder(w).Encode(column)
-	if err != nil {
-		panic(err)
-		return
-	}
-}
-
 func (h ColumnHandler) CreateColumn(w http.ResponseWriter, r *http.Request) {
 	projectID := mux.Vars(r)["projectId"]
 	name := r.FormValue("name")
@@ -87,10 +67,9 @@ func (h ColumnHandler) EditColumn(w http.ResponseWriter, r *http.Request) {
 }
 
 func (h ColumnHandler) RemoveColumn(w http.ResponseWriter, r *http.Request) {
-	projectID := mux.Vars(r)["projectId"]
 	columnID := mux.Vars(r)["columnId"]
 
-	column, err := h.service.RemoveColumn(projectID, columnID)
+	err := h.service.RemoveColumn(columnID)
 
 	if err != nil {
 		w.WriteHeader(http.StatusBadRequest)
@@ -98,8 +77,6 @@ func (h ColumnHandler) RemoveColumn(w http.ResponseWriter, r *http.Request) {
 	}
 
 	w.WriteHeader(http.StatusOK)
-	w.Header().Add("Content-Type", "application/json")
-	err = json.NewEncoder(w).Encode(column)
 	if err != nil {
 		panic(err)
 		return

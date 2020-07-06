@@ -13,15 +13,13 @@ func NewCommentService(repository repositories.CommentRepository) CommentService
 	return CommentService{repository: repository}
 }
 
-func (s *CommentService) GetComments(projectID string, columnID string, taskID string) (*[]model.Comment, error) {
-	return s.repository.GetComments(projectID, columnID, taskID)
+func (s *CommentService) GetComments(taskID string) (*[]model.Comment, error) {
+	return s.repository.GetComments(taskID)
 }
 
-func (s *CommentService) CreateComment(projectID string, columnID string, taskID string, text string) (*model.Comment, error) {
+func (s *CommentService) CreateComment(taskID string, text string) (*model.Comment, error) {
 	comment := &model.Comment{
 		Text: text,
-		ProjectID: projectID,
-		ColumnID: columnID,
 		TaskID: taskID,
 	}
 
@@ -32,13 +30,10 @@ func (s *CommentService) CreateComment(projectID string, columnID string, taskID
 	return comment, nil
 }
 
-func (s *CommentService) EditComments(commentID string, text string, projectID string, columnID string, taskID string) (*model.Comment, error) {
+func (s *CommentService) EditComments(commentID string, text string) (*model.Comment, error) {
 	comment := &model.Comment{
 		ID: commentID,
 		Text: text,
-		ProjectID: projectID,
-		ColumnID: columnID,
-		TaskID: taskID,
 	}
 
 	if err := s.repository.CreateComment(comment); err != nil {
@@ -48,6 +43,6 @@ func (s *CommentService) EditComments(commentID string, text string, projectID s
 	return comment, nil
 }
 
-func (s *CommentService) RemoveComments(commentID string, projectID string, columnID string, taskID string) (*model.Comment, error) {
-	return s.repository.RemoveComments(commentID, projectID, columnID, taskID)
+func (s *CommentService) RemoveComments(commentID string) error {
+	return s.repository.RemoveComments(commentID)
 }

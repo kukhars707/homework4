@@ -2,7 +2,6 @@ package handlers
 
 import (
 	"encoding/json"
-	"fmt"
 	"github.com/gorilla/mux"
 	"github.com/kukhars707/homework4/services"
 	"net/http"
@@ -18,9 +17,8 @@ func NewTaskHandler(service services.TaskService) TaskHandler {
 
 func (h TaskHandler) GetTasks(w http.ResponseWriter, r *http.Request)  {
 	projectID := mux.Vars(r)["projectId"]
-	columnID := mux.Vars(r)["columnId"]
 
-	tasks, err := h.service.GetTasks(projectID, columnID)
+	tasks, err := h.service.GetTasks(projectID)
 
 	if err != nil {
 		w.WriteHeader(http.StatusBadRequest)
@@ -37,11 +35,9 @@ func (h TaskHandler) GetTasks(w http.ResponseWriter, r *http.Request)  {
 }
 
 func (h TaskHandler) GetTask(w http.ResponseWriter, r *http.Request)  {
-	projectID := mux.Vars(r)["projectId"]
-	columnID := mux.Vars(r)["columnId"]
 	taskID := mux.Vars(r)["taskId"]
 
-	task, err := h.service.GetTask(projectID, columnID, taskID)
+	task, err := h.service.GetTask(taskID)
 
 	if err != nil {
 		w.WriteHeader(http.StatusBadRequest)
@@ -95,11 +91,9 @@ func (h TaskHandler) EditTasks(w http.ResponseWriter, r *http.Request)  {
 }
 
 func (h TaskHandler) RemoveTasks(w http.ResponseWriter, r *http.Request)  {
-	projectID := mux.Vars(r)["projectId"]
-	columnID := mux.Vars(r)["columnId"]
 	taskID := mux.Vars(r)["taskId"]
 
-	task, err := h.service.RemoveTask(projectID, columnID, taskID)
+	err := h.service.RemoveTask(taskID)
 
 	if err != nil {
 		w.WriteHeader(http.StatusBadRequest)
@@ -108,7 +102,6 @@ func (h TaskHandler) RemoveTasks(w http.ResponseWriter, r *http.Request)  {
 
 	w.WriteHeader(http.StatusOK)
 	w.Header().Add("Content-Type", "application/json")
-	err = json.NewEncoder(w).Encode(task)
 	if err != nil {
 		panic(err)
 		return
